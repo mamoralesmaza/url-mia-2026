@@ -1,0 +1,6 @@
+• ¿Qué es Git? 
+Es un programa local que rastrea y guarda el historial de cambios de los archivos en tu computadora para no perder trabajo ni versiones anteriores.
+• ¿Qué es GitLab? 
+Es una plataforma en la nube que guarda tus repositorios de Git en internet para respaldarlos y trabajar en equipo.
+• ¿Cuál es la diferencia entre Git y GitLab?
+Git es la herramienta que usas en tu PC para controlar las versiones de tus archivos, mientras que GitLab es el sitio web donde los subes y compartes.

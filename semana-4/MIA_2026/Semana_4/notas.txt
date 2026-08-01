@@ -1,0 +1,6 @@
+Ejemplos:
+1. git checkout
+2. git branch
+3. git clone
+4. git status
+5. git push
