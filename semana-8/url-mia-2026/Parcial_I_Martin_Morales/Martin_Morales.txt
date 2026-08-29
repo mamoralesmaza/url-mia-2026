@@ -1,0 +1,3 @@
+archivo txt. para el Parcial 1.
+Esta es la segunda linea, Manejo e Implementacion de Archivos
+Tercera linea de prueba.
