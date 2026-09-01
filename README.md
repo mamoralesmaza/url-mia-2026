@@ -1,3 +1,3 @@
-Lab MIA-2026
+gotLab MIA-2026
 
 Semana 8
