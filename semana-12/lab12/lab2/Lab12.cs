@@ -4,11 +4,19 @@ using Azure.Storage.Blobs;
 const string containerName = "mia-archivos";
 const string connectionStringVariable = "AZURE_STORAGE_CONNECTION_STRING";
 
+LeerArchivoDotEnv(connectionStringVariable);
 string? connectionString = Environment.GetEnvironmentVariable(connectionStringVariable);
 if (string.IsNullOrWhiteSpace(connectionString))
 {
     Console.WriteLine($"No se encontró la variable de entorno {connectionStringVariable}.");
     Console.WriteLine("Configúrala en el entorno desde el que iniciarás la aplicación y vuelve a intentarlo.");
+    return;
+}
+
+if (connectionString.Equals("TU_CONNECTION_STRING", StringComparison.Ordinal))
+{
+    Console.WriteLine("La configuración todavía contiene el marcador TU_CONNECTION_STRING.");
+    Console.WriteLine("Reemplázalo por una Connection String real de Azure Storage en .env o en la variable de entorno.");
     return;
 }
 
@@ -71,6 +79,56 @@ static void MostrarMenu()
     Console.WriteLine("4. Eliminar archivo");
     Console.WriteLine("5. Salir");
     Console.WriteLine("=================================");
+}
+
+static void LeerArchivoDotEnv(string variableEsperada)
+{
+    const string nombreArchivo = ".env";
+
+    if (!File.Exists(nombreArchivo))
+    {
+        return;
+    }
+
+    try
+    {
+        foreach (string linea in File.ReadLines(nombreArchivo))
+        {
+            string lineaSinEspacios = linea.TrimStart();
+            if (lineaSinEspacios.Length == 0 || lineaSinEspacios.StartsWith('#'))
+            {
+                continue;
+            }
+
+            int separador = lineaSinEspacios.IndexOf('=');
+            if (separador <= 0)
+            {
+                continue;
+            }
+
+            string nombreVariable = lineaSinEspacios[..separador].Trim();
+            if (!nombreVariable.Equals(variableEsperada, StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            if (Environment.GetEnvironmentVariable(variableEsperada) is null)
+            {
+                string valor = lineaSinEspacios[(separador + 1)..];
+                Environment.SetEnvironmentVariable(variableEsperada, valor);
+            }
+
+            break;
+        }
+    }
+    catch (IOException)
+    {
+        Console.WriteLine("No se pudo leer el archivo local de configuración .env.");
+    }
+    catch (UnauthorizedAccessException)
+    {
+        Console.WriteLine("No se tienen permisos para leer el archivo local de configuración .env.");
+    }
 }
 
 static async Task SubirArchivoAsync(BlobContainerClient containerClient)
